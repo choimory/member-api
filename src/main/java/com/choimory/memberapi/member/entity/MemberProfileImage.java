@@ -17,9 +17,9 @@ public class MemberProfileImage extends CommonDateTimeAt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member;*/
+    private Member member;
 
     //이미지 종류 코드
     @Enumerated(EnumType.STRING)
@@ -55,9 +55,10 @@ public class MemberProfileImage extends CommonDateTimeAt {
     }
 
     @Builder(toBuilder = true)
-    public MemberProfileImage(LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt, Long id, Type type, String originalFileName, String fileName, String filePath, Long fileSize, String thumbNailFileName, String thumbNamilFilePath, String thumbNailFileSize) {
+    public MemberProfileImage(LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt, Long id, Member member, Type type, String originalFileName, String fileName, String filePath, Long fileSize, String thumbNailFileName, String thumbNamilFilePath, String thumbNailFileSize) {
         super(createdAt, modifiedAt, deletedAt);
         this.id = id;
+        this.member = member;
         this.type = type;
         this.originalFileName = originalFileName;
         this.fileName = fileName;
