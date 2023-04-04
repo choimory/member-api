@@ -11,30 +11,31 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @Getter
-public class MemberAuthority extends CommonDateTimeAt {
+public class MemberSuspension extends CommonDateTimeAt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    //권한 종류
-    @Enumerated(EnumType.STRING)
-    private Level level;
+    //사유
+    private String reason;
 
-    //권한 코드
-    public enum Level{
-        MEMBER,
-        ADMIN
-    }
+    //정지일자
+    private LocalDateTime suspendedAt;
+
+    //정지만료일자
+    private LocalDateTime suspendedTo;
 
     @Builder(toBuilder = true)
-    public MemberAuthority(LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt, Long id, Member member, Level level) {
+    public MemberSuspension(LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt, Long id, Member member, String reason, LocalDateTime suspendedAt, LocalDateTime suspendedTo) {
         super(createdAt, modifiedAt, deletedAt);
         this.id = id;
         this.member = member;
-        this.level = level;
+        this.reason = reason;
+        this.suspendedAt = suspendedAt;
+        this.suspendedTo = suspendedTo;
     }
 }
