@@ -36,7 +36,7 @@ public class Member extends CommonDateTimeAt {
     private List<MemberProfileImage> memberProfileImages = new ArrayList<>();
 
     //회원 권한
-    @OneToOne(mappedBy = "member")
+    @OneToOne(mappedBy = "member", orphanRemoval = true)
     private MemberAuthority memberAuthority;
 
     //회원 정지 내역
