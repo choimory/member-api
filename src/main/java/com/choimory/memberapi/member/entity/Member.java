@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -40,7 +38,8 @@ public class Member extends CommonDateTimeAt {
     private MemberAuthority memberAuthority;
 
     //회원 정지 내역
-    //private List<MemberSuspension> memberSuspensions = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<MemberSuspension> memberSuspensions = new ArrayList<>();
 
     //회원약관 동의
     //private Set<MemberAgreement> memberAgreements = new HashSet<>();
