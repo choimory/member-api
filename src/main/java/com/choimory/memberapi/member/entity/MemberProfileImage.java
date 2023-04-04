@@ -17,6 +17,10 @@ public class MemberProfileImage extends CommonDateTimeAt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /*@ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;*/
+
     //이미지 종류 코드
     @Enumerated(EnumType.STRING)
     private Type type;
