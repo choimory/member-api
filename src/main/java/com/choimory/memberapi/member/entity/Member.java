@@ -38,7 +38,7 @@ public class Member extends CommonDateTimeAt {
     private MemberAuthority memberAuthority;
 
     //회원 정지 내역
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<MemberSuspension> memberSuspensions = new ArrayList<>();
 
     //회원약관 동의
