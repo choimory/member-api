@@ -12,16 +12,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
-@Entity
+/*@Entity
 @NoArgsConstructor
-@Getter
-public class MemberAgreement extends CommonDateTimeAt {
-    @EmbeddedId
+@Getter*/
+public class MemberAgreement /*extends CommonDateTimeAt*/ {
+    /*@EmbeddedId*/
     private MemberAgreementId memberAgreementId;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Member member;*/
 
     //필수여부
     private Boolean isRequired;
@@ -29,12 +29,12 @@ public class MemberAgreement extends CommonDateTimeAt {
     //동의여부
     private Boolean isAgree;
 
-    @Builder(toBuilder = true)
+    /*@Builder(toBuilder = true)
     public MemberAgreement(LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt, MemberAgreementId memberAgreementId, Member member, Boolean isRequired, Boolean isAgree) {
         super(createdAt, modifiedAt, deletedAt);
         this.memberAgreementId = memberAgreementId;
         this.member = member;
         this.isRequired = isRequired;
         this.isAgree = isAgree;
-    }
+    }*/
 }

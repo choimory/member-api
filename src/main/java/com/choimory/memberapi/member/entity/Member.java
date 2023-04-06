@@ -44,6 +44,6 @@ public class Member extends CommonDateTimeAt {
     private List<MemberSuspension> memberSuspensions = new ArrayList<>();
 
     //회원약관 동의
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private Set<MemberAgreement> memberAgreements = new HashSet<>();
+    /*@OneToMany(mappedBy = "member", orphanRemoval = true)
+    private Set<MemberAgreement> memberAgreements = new HashSet<>();*/
 }
