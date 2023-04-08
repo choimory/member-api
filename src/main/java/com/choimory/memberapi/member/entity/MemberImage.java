@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @Getter
-public class MemberProfileImage extends CommonDateTimeAt {
+public class MemberImage extends CommonDateTimeAt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -55,7 +55,7 @@ public class MemberProfileImage extends CommonDateTimeAt {
     }
 
     @Builder(toBuilder = true)
-    public MemberProfileImage(LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt, Long id, Member member, Type type, String originalFileName, String fileName, String filePath, Long fileSize, String thumbNailFileName, String thumbNamilFilePath, String thumbNailFileSize) {
+    public MemberImage(LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt, Long id, Member member, Type type, String originalFileName, String fileName, String filePath, Long fileSize, String thumbNailFileName, String thumbNamilFilePath, String thumbNailFileSize) {
         super(createdAt, modifiedAt, deletedAt);
         this.id = id;
         this.member = member;
