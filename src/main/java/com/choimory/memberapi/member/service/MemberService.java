@@ -1,11 +1,13 @@
 package com.choimory.memberapi.member.service;
 
+import com.choimory.memberapi.common.exception.CommonException;
 import com.choimory.memberapi.member.data.dto.MemberDto;
 import com.choimory.memberapi.member.data.request.*;
 import com.choimory.memberapi.member.data.response.*;
 import com.choimory.memberapi.member.entity.Member;
 import com.choimory.memberapi.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +23,7 @@ public class MemberService {
     public ResponseMemberFind find (final String identity) {
         // 아이디로 조회
         Member member = memberRepository.findMemberByIdentityEquals(identity)
-                .orElseThrow(() -> new NoSuchElementException("없엉"));
+                .orElseThrow(() -> new CommonException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase()));
 
         // DTO 변환
         // 반환
