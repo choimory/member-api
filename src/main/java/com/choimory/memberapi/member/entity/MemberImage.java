@@ -41,7 +41,7 @@ public class MemberImage extends CommonDateTimeAt {
     private String thumbNailFileName;
 
     //썸네일 파일경로
-    private String thumbNamilFilePath;
+    private String thumbNailFilePath;
 
     //썸네일 파일크기
     private String thumbNailFileSize;
@@ -55,7 +55,7 @@ public class MemberImage extends CommonDateTimeAt {
     }
 
     @Builder(toBuilder = true)
-    public MemberImage(LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt, Long id, Member member, Type type, String originalFileName, String fileName, String filePath, Long fileSize, String thumbNailFileName, String thumbNamilFilePath, String thumbNailFileSize) {
+    public MemberImage(LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt, Long id, Member member, Type type, String originalFileName, String fileName, String filePath, Long fileSize, String thumbNailFileName, String thumbNailFilePath, String thumbNailFileSize) {
         super(createdAt, modifiedAt, deletedAt);
         this.id = id;
         this.member = member;
@@ -65,7 +65,7 @@ public class MemberImage extends CommonDateTimeAt {
         this.filePath = filePath;
         this.fileSize = fileSize;
         this.thumbNailFileName = thumbNailFileName;
-        this.thumbNamilFilePath = thumbNamilFilePath;
+        this.thumbNailFilePath = thumbNailFilePath;
         this.thumbNailFileSize = thumbNailFileSize;
     }
 }
