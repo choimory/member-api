@@ -1,6 +1,7 @@
 package com.choimory.memberapi.jwt;
 
 
+import com.choimory.memberapi.member.data.dto.MemberDto;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,12 +33,12 @@ public class JwtUtil {
         this.expiredTime = expiredTime;
     }
 
-    public String generateToken (String identity) {
+    public String generateToken (MemberDto member) {
         Date now = new Date();
         Date expiredAt = new Date(now.getTime() + expiredTime);
 
         Claims claims = Jwts.claims()
-                .setSubject(identity);
+                .setSubject(member.getIdentity());
 
         return Jwts.builder()
                 .setClaims(claims)
