@@ -66,6 +66,17 @@ public class MemberDto {
                 .build();
     }
 
+    public Boolean isSuspendedMember () {
+        return memberSuspensions.stream()
+                .anyMatch(memberSuspension -> {
+                    LocalDateTime now = LocalDateTime.now();
+                    LocalDateTime at = memberSuspension.getSuspendedAt();
+                    LocalDateTime to = memberSuspension.getSuspendedTo();
+                    return at.isBefore(now) && to.isAfter(now);
+                });
+    }
+
+
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
