@@ -1,28 +1,34 @@
 package com.choimory.memberapi.member.service;
 
 import com.choimory.memberapi.common.exception.CommonException;
+import com.choimory.memberapi.jwt.JwtUtil;
+import com.choimory.memberapi.member.code.MemberValid;
 import com.choimory.memberapi.member.data.dto.MemberDto;
-import com.choimory.memberapi.member.data.request.*;
+import com.choimory.memberapi.member.data.request.RequestMemberBan;
+import com.choimory.memberapi.member.data.request.RequestMemberJoin;
+import com.choimory.memberapi.member.data.request.RequestMemberLogin;
+import com.choimory.memberapi.member.data.request.RequestMemberUpdate;
 import com.choimory.memberapi.member.data.response.*;
 import com.choimory.memberapi.member.entity.Member;
 import com.choimory.memberapi.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     //상세조회
     public ResponseMemberFind find (final String identity) {
         // 아이디로 조회
-        Member member = memberRepository.findMemberByIdentityEquals(identity)
+        Member member = memberRepository.findMemberByIdentityEqualsAndDeletedAtIsNull(identity)
                 .orElseThrow(() -> new CommonException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase()));
 
         // DTO 변환
@@ -56,12 +62,23 @@ public class MemberService {
 
     //로그인
     public ResponseMemberLogin login (final RequestMemberLogin param) {
-        // 아이디 & 비밀번호로 조회하여 check exists
+        // 아이디로 조회
+        MemberDto member = MemberDto.toDto(memberRepository.findMemberByIdentityEqualsAndDeletedAtIsNull(param.getIdentity())
+                .orElseThrow(() -> new CommonException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase())));
+
+        // 비밀번호 일치여부 확인
+        Boolean isPasswordMatched = param.isPasswordMatched(passwordEncoder, member.getPassword());
+        if(!isPasswordMatched) throw new CommonException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
+
         // 정지여부 확인
-            //정지시 정지에 해당하는 처리
-        // 토큰 생성
-        // 토큰 반환
-        return null;
+        Boolean isSuspendedMember = member.isSuspendedMember();
+        if(isSuspendedMember) throw new CommonException(HttpStatus.FORBIDDEN, MemberValid.CODE_SUSPENDED_MEMBER, MemberValid.MESSAGE_SUSPENDED_MEMBER);
+
+        // 토큰 생성 및 반환
+        return ResponseMemberLogin.builder()
+                .identity(member.getIdentity())
+                .token(jwtUtil.generateToken(member))
+                .build();
     }
 
     //밴
