@@ -1,5 +1,6 @@
 package com.choimory.memberapi.member.controller;
 
+import com.choimory.memberapi.jwt.JwtUtil;
 import com.choimory.memberapi.member.data.request.*;
 import com.choimory.memberapi.member.data.response.*;
 import com.choimory.memberapi.member.service.MemberService;
@@ -9,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,18 +18,18 @@ import javax.validation.constraints.Min;
 @Validated
 public class MemberController {
     private final MemberService memberService;
+    private final JwtUtil jwtUtil;
 
     //본인 상세조회
     @GetMapping
     public ResponseMemberFind findMe (@RequestHeader(name = "Authorization") final String token) {
-        //TODO token to ID
-        return memberService.find(1L);
+        return memberService.find(jwtUtil.findIdentityFromToken(token));
     }
 
     //타인 상세조회
-    @GetMapping("/{id}")
-    public ResponseMemberFind findOther (@PathVariable @Min(1) @Valid final Long id) {
-        return memberService.find(id);
+    @GetMapping("/{identity}")
+    public ResponseMemberFind findOther (@PathVariable final String identity) {
+        return memberService.find(identity);
     }
 
     //가입
@@ -42,8 +43,7 @@ public class MemberController {
     @PutMapping
     public ResponseMemberUpdate update (@RequestHeader(name = "Authorization") final String token,
                                         @RequestBody @Valid final RequestMemberUpdate param) {
-        //TODO token to ID
-        return memberService.update(1L, param);
+        return memberService.update(jwtUtil.findIdentityFromToken(token), param);
     }
 
     //로그인
@@ -53,19 +53,17 @@ public class MemberController {
     }
 
     //밴
-    @DeleteMapping("/{targetId}")
-    public ResponseMemberBan ban (@PathVariable @Min(1) @Valid final Long targetId,
+    @DeleteMapping("/{targetIdentity}")
+    public ResponseMemberBan ban (@PathVariable final String targetIdentity,
                                       @RequestHeader(name = "Authorization") final String token,
                                       @RequestBody @Valid final RequestMemberBan param) {
-        //TODO token to my ID
-        return memberService.ban(targetId, 1L, param);
+        return memberService.ban(targetIdentity, jwtUtil.findIdentityFromToken(token), param);
     }
 
     //탈퇴
     @DeleteMapping
     public ResponseMemberWithdrawal withdrawal (@RequestHeader(name = "Authorization") final String token,
                                                 @RequestBody final RequestMemberWithdrawal param) {
-        // TODO token to ID
-        return memberService.withdrawal(1L, param);
+        return memberService.withdrawal(jwtUtil.findIdentityFromToken(token));
     }
 }
