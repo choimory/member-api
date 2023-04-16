@@ -63,7 +63,7 @@ class MemberControllerTest {
             when.andExpect(MockMvcResultMatchers.status().is(httpStatus.value()))
                     .andExpect(MockMvcResultMatchers.jsonPath("status").value(httpStatus.value()))
                     .andExpect(MockMvcResultMatchers.jsonPath("message").value(httpStatus.getReasonPhrase()))
-                    .andExpect(MockMvcResultMatchers.jsonPath("user").doesNotExist());
+                    .andExpect(MockMvcResultMatchers.jsonPath("member").doesNotExist());
         }
     }
 
