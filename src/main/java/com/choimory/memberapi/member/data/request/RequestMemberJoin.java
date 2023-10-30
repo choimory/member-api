@@ -1,14 +1,18 @@
 package com.choimory.memberapi.member.data.request;
 
+import com.choimory.memberapi.member.entity.Member;
 import com.choimory.memberapi.member.entity.MemberImage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Getter
@@ -41,5 +45,15 @@ public class RequestMemberJoin {
     public static class Image{
         private final MemberImage.Type type;
         private final MultipartFile file;
+    }
+
+    public Member toEntity (PasswordEncoder passwordEncoder, List<MemberImage> images){
+        return Member.builder()
+                .identity(identity)
+                .password(passwordEncoder.encode(password))
+                .email(email)
+                .profile(profile)
+                .memberImages(images)
+                .build();
     }
 }

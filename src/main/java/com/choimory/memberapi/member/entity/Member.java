@@ -1,10 +1,12 @@
 package com.choimory.memberapi.member.entity;
 
 import com.choimory.memberapi.common.entity.CommonDateTimeAt;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,4 +46,17 @@ public class Member extends CommonDateTimeAt {
     //회원약관 동의
     /*@OneToMany(mappedBy = "member", orphanRemoval = true)
     private Set<MemberAgreement> memberAgreements = new HashSet<>();*/
+
+    @Builder(toBuilder = true)
+    public Member(LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime deletedAt, Long id, String identity, String password, String email, String profile, List<MemberImage> memberImages, MemberAuthority memberAuthority, List<MemberSuspension> memberSuspensions) {
+        super(createdAt, modifiedAt, deletedAt);
+        this.id = id;
+        this.identity = identity;
+        this.password = password;
+        this.email = email;
+        this.profile = profile;
+        this.memberImages = memberImages;
+        this.memberAuthority = memberAuthority;
+        this.memberSuspensions = memberSuspensions;
+    }
 }

@@ -1,6 +1,7 @@
 package com.choimory.memberapi.member.controller;
 
 import com.choimory.memberapi.config.SpringRestDocsConfig;
+import com.choimory.memberapi.member.data.request.RequestMemberJoin;
 import com.choimory.memberapi.member.data.request.RequestMemberLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -71,11 +73,20 @@ class MemberControllerTest {
         }
     }
 
-    @Test
-    void join() {
+    @DisplayName("회원가입")
+    @ParameterizedTest
+    @MethodSource("joinMethodSource")
+    void join(final boolean isSuccess, final String identity, final String password, final String email, final String profile, List<RequestMemberJoin.Image> images) {
         /*given*/
         /*when*/
+
+
         /*then*/
+        if(isSuccess){
+
+        } else {
+
+        }
     }
 
     @Test
@@ -145,5 +156,9 @@ class MemberControllerTest {
                 .add(Arguments.arguments(false, null, "asdqwe123", HttpStatus.BAD_REQUEST))
                 .add(Arguments.arguments(false, "choimory", null, HttpStatus.BAD_REQUEST))
                 .build();
+    }
+
+    static Stream<Arguments> joinMethodSource(){
+        return null;
     }
 }

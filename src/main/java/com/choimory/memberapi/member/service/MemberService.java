@@ -10,12 +10,16 @@ import com.choimory.memberapi.member.data.request.RequestMemberLogin;
 import com.choimory.memberapi.member.data.request.RequestMemberUpdate;
 import com.choimory.memberapi.member.data.response.*;
 import com.choimory.memberapi.member.entity.Member;
+import com.choimory.memberapi.member.entity.MemberImage;
 import com.choimory.memberapi.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +33,9 @@ public class MemberService {
     public ResponseMemberFind find (final String identity) {
         // 아이디로 조회
         Member member = memberRepository.findMemberByIdentityEqualsAndDeletedAtIsNull(identity)
-                .orElseThrow(() -> new CommonException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase()));
+                .orElseThrow(() -> new CommonException(HttpStatus.NOT_FOUND,
+                        HttpStatus.NOT_FOUND.value(),
+                        HttpStatus.NOT_FOUND.getReasonPhrase()));
 
         // DTO 변환
         // 반환
@@ -39,14 +45,37 @@ public class MemberService {
     }
 
     //가입
+    @Transactional
     public ResponseMemberJoin join (final RequestMemberJoin param) {
+        // 파일 검증
+        // TODO
+
         // 썸네일 생성
-        // S3 업로드
+        // TODO
+
+        // S3 업로드 후 업로드 결과 반영된 엔티티 생성
+        // TODO
+        List<MemberImage> images = null;
+
+        // ID, 이메일 중복 조회
+        if(memberRepository.existsByIdentityOrEmail(param.getIdentity(), param.getEmail())){
+            throw new CommonException(HttpStatus.BAD_REQUEST,
+                    MemberValid.CODE_DUPLICATED_ID_OR_EMAIL,
+                    MemberValid.MESSAGE_DUPLICATED_ID_OR_EMAIL);
+        }
+
         // entity 생성
+        final Member member = param.toEntity(passwordEncoder, images);
+
         // db, file commit or rollback
+        Member result = memberRepository.save(member);
+
         // DTO 변환
         // 반환
-        return null;
+        return ResponseMemberJoin.builder()
+                .identity(result.getIdentity())
+                .email(result.getEmail())
+                .build();
     }
 
     //업데이트
@@ -92,6 +121,7 @@ public class MemberService {
 
     //탈퇴
     public ResponseMemberWithdrawal withdrawal (final String identity) {
+        // 비밀번호 확인
         // 탈퇴 처리
         // 결과 반환
         return null;
